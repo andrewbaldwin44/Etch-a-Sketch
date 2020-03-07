@@ -48,10 +48,10 @@ h1 {
 
 @media (max-width: 680px) {
   html {
-    font-size: 22px;
+    font-size: 50px;
   }
   #gridArea {
-    width: 94vw;
-    height: 94vw;
+    width: 70vw;
+    height: 70vw;
   }
 }
