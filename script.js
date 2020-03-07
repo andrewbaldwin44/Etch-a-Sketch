@@ -18,17 +18,8 @@ function createGrid(resizeValue) {
     let gridItem = document.createElement("div");
     gridItem.setAttribute("class", "gridItems");
 
-    gridItem.addEventListener("pointerdown", e => {
-      e.preventDefault();
-      e.target.releasePointerCapture(e.pointerId);
-      e.target.style.backgroundColor = "black";
-    });
-    gridItem.addEventListener("pointerenter", e => {
-      console.log("enter");
-      e.target.style.backgroundColor = "black";
+    gridItem.addEventListener("pointerenter", selectGridFill);
 
-    });
-    
     mainGrid.appendChild(gridItem);
   }
 }
