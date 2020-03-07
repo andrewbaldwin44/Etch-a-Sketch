@@ -23,27 +23,10 @@ function createGrid(resizeValue) {
   }
 }
 
-function selectGridFill(e) {
-  const shaderPencilCheck = document.querySelector("#shaderPencilCheck:checked");
-  console.log(e.target.getAttribute("id"));
-
-  if (e.target.getAttribute("class") == "gridItems") {
-    e.target.style.backgroundColor = "black";
-  }
-  if (e.target.getAttribute("id") == "shaderPencilCheck") {
-    
-  }
-    /*
-
-      ? let shadeDegree = +(gridItem.style.backgroundColor.slice(-4, -1)) + 0.1;
-        item.style.backgroundColor = `rgba(0, 0, 0, ${shadeDegree})`
-      : gridItem.style.backgroundColor = "black"*/
-}
-
 function getResizeValue() {
   let resizeValue = 16;
   resizeValue = prompt(
-    `How would you like to resize your grid? The number corresponds to the
+    `Please enter a number from 1 to 100. The number corresponds to the
      number of squares on each side of the grid!`, "16");
   do {
     if (resizeValue == null) {
@@ -75,19 +58,27 @@ function makeResizeButton() {
 }
 
 function makeShadingPencil(){
-  const shaderPencilCheck = document.createElement("input");
-  const shaderPencilLabel = document.createElement("label");
+  const shaderCheck = document.createElement("input");
+  const shaderLabel = document.createElement("label");
 
-  shaderPencilCheck.setAttribute("type", "checkbox");
-  shaderPencilCheck.setAttribute("id", "#shaderPencilCheck");
-  shaderPencilLabel.textContent = "Shading Pencil";
+  shaderCheck.setAttribute("type", "checkbox");
+  shaderCheck.setAttribute("id", "shaderCheck");
+  shaderLabel.textContent = "Shading Pencil";
 
-  shaderPencilCheck.addEventListener("click", (e) => selectGridFill(e));
-
-  body.appendChild(shaderPencilCheck);
-  body.appendChild(shaderPencilLabel);
+  body.appendChild(shaderCheck);
+  body.appendChild(shaderLabel);
 }
 
+function selectGridFill(e) {
+  const shaderCheck = document.querySelector("#shaderCheck");
+  let shadeDegree = +(e.target.style.backgroundColor.slice(-4, -1)) + 0.1;
+
+  shaderCheck.checked
+    ? e.target.style.backgroundColor = `rgba(0, 0, 0, ${shadeDegree})`
+    : e.target.style.backgroundColor = "black"
+}
+
+
+createGrid("16");
 makeResizeButton();
 makeShadingPencil();
-createGrid("16");
