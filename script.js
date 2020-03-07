@@ -57,28 +57,54 @@ function makeResizeButton() {
   body.appendChild(resizeButton);
 }
 
-function makeShadingPencil(){
+function makeCheckboxes(){
   const shaderCheck = document.createElement("input");
+  const multicolorCheck = document.createElement("input");
   const shaderLabel = document.createElement("label");
+  const multicolorLabel = document.createElement("label");
 
   shaderCheck.setAttribute("type", "checkbox");
   shaderCheck.setAttribute("id", "shaderCheck");
   shaderLabel.textContent = "Shading Pencil";
+  multicolorCheck.setAttribute("type", "checkbox");
+  multicolorCheck.setAttribute("id", "multicolorCheck");
+  multicolorLabel.textContent = " Multicolored Brush"
 
   body.appendChild(shaderCheck);
   body.appendChild(shaderLabel);
+  body.appendChild(multicolorCheck);
+  body.appendChild(multicolorLabel);
 }
 
 function selectGridFill(e) {
   const shaderCheck = document.querySelector("#shaderCheck");
   let shadeDegree = +(e.target.style.backgroundColor.slice(-4, -1)) + 0.1;
 
-  shaderCheck.checked
-    ? e.target.style.backgroundColor = `rgba(0, 0, 0, ${shadeDegree})`
-    : e.target.style.backgroundColor = "black"
+
+  if (shaderCheck.checked && multicolorCheck.checked) {
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 255);
+    let b = Math.floor(Math.random() * 255);
+
+    e.target.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${shadeDegree})`
+  }
+  else if (shaderCheck.checked) {
+    e.target.style.backgroundColor = `rgba(0, 0, 0, ${shadeDegree})`
+  }
+  else if (multicolorCheck.checked) {
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 255);
+    let b = Math.floor(Math.random() * 255);
+
+    e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`
+  }
+
+  else {
+    e.target.style.backgroundColor = "black"
+  }
 }
 
 
 createGrid("16");
 makeResizeButton();
-makeShadingPencil();
+makeCheckboxes();
