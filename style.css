@@ -1,14 +1,50 @@
-#gridArea {
-  display: grid;
-  width: 800px;
-  height: 800px;
-  border: 1px solid black;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+
+html {
+  display: flex;
+  justify-content: center;
+  overflow-y: hidden;
+}
+h1 {
+  text-align: center;
+  padding-bottom: 15px;
 }
 
+#gridArea {
+  display: grid;
+  width: 650px;
+  height: 650px;
+  border: 1px solid black;
+  margin: 40px auto;
+}
 .gridItems {
   border: 1px solid black;
+}
+
+#gridSelectors {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  row-gap: 20px;
+  font-size: 20px;
+}
+
+#colorInput {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-right: 5px;
+}
+
+#clearGridButton {
+  width: 140px;
+  height: 30px;
+}
+
+#resizeInput {
+  margin-left: 5px;
+  width: 50px;
+}
+
+@media (max-width: 680px) {
+
 }

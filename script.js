@@ -14,13 +14,21 @@ function createGrid(resizeValue) {
      grid-template-rows: repeat(${resizeValue}, 1fr)`
   body.appendChild(mainGrid);
 
-  let eventType = "mouseover";
-  if (screenWidth < 600) eventType = "touchenter";
-
-  for (i = 0; i < (resizeValue*resizeValue); i++) {
+  for (let i = 0; i < (resizeValue*resizeValue); i++) {
     let gridItem = document.createElement("div");
     gridItem.setAttribute("class", "gridItems");
-    gridItem.addEventListener(eventType, selectGridFill);
+
+    gridItem.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      e.target.releasePointerCapture(e.pointerId);
+      e.target.style.backgroundColor = "black";
+    });
+    gridItem.addEventListener("pointerenter", e => {
+      console.log("enter");
+      e.target.style.backgroundColor = "black";
+
+    });
+    
     mainGrid.appendChild(gridItem);
   }
 }
@@ -28,18 +36,23 @@ function createGrid(resizeValue) {
 function createGridSelectors(){
   const gridSelectors = document.createElement("section");
 
+  const shaderSelector = document.createElement("div");
   const shaderCheck = document.createElement("input");
   const shaderLabel = document.createElement("label");
 
+  const multicolorSelector = document.createElement("div");
   const multicolorCheck = document.createElement("input");
   const multicolorLabel = document.createElement("label");
 
-  const colorSelector = document.createElement("input");
-  const colorSelectorLabel = document.createElement("label");
+  const colorSelector = document.createElement("div");
+  const colorInput = document.createElement("input");
+  const colorInputLabel = document.createElement("label");
 
-  const showGridLine = document.createElement("input");
-  const showGridLineLabel = document.createElement("label");
+  const gridLineSelector= document.createElement("div");
+  const toggleGridLines = document.createElement("input");
+  const toggleGridLinesLabel = document.createElement("label");
 
+  const resizeSelector = document.createElement("div");
   const resizeInput = document.createElement("input");
   const resizeInputLabel = document.createElement("label");
 
@@ -59,21 +72,21 @@ function createGridSelectors(){
   multicolorLabel.setAttribute("for", "multicolorCheck");
   multicolorLabel.textContent = " Multicolored Brush";
 
-  colorSelector.setAttribute("type", "color");
-  colorSelector.setAttribute("id", "colorSelector");
-  colorSelector.setAttribute("name", "colorSelector");
-  colorSelector.setAttribute("for", "colorSelector");
-  colorSelectorLabel.textContent = "Select a Color";
+  colorInput.setAttribute("type", "color");
+  colorInput.setAttribute("id", "colorInput");
+  colorInput.setAttribute("name", "colorInput");
+  colorInput.setAttribute("for", "colorInput");
+  colorInputLabel.textContent = "Select a Color";
 
-  showGridLine.setAttribute("type", "checkbox");
-  showGridLine.setAttribute("id", "showGridLine");
-  showGridLine.setAttribute("name", "showGridLine");
-  showGridLine.addEventListener("click", toggleGridLines);
-  showGridLineLabel.setAttribute("for", "showGridLine");
-  showGridLineLabel.textContent = "Toggle Gridlines";
-
+  toggleGridLines.setAttribute("type", "checkbox");
+  toggleGridLines.setAttribute("id", "toggleGridLines");
+  toggleGridLines.setAttribute("name", "toggleGridLines");
+  toggleGridLines.addEventListener("click", toggleGridLine);
+  toggleGridLinesLabel.setAttribute("for", "toggleGridLines");
+  toggleGridLinesLabel.textContent = "Toggle Gridlines";
 
   resizeInput.setAttribute("type", "text");
+  resizeInput.setAttribute("id", "resizeInput");
   resizeInput.setAttribute("name", "resizeInput");
   resizeInput.setAttribute("type", "number");
   resizeInput.setAttribute("min", "1");
@@ -84,24 +97,29 @@ function createGridSelectors(){
   resizeInputLabel.setAttribute("for", "resizeInput");
   resizeInputLabel.textContent = "Resize Grid";
 
-
+  clearGridButton.setAttribute("id", "clearGridButton");
   clearGridButton.textContent = "Clear Grid";
   clearGridButton.addEventListener("click", clearGrid);
 
-  gridSelectors.appendChild(shaderCheck);
-  gridSelectors.appendChild(shaderLabel);
+  shaderSelector.appendChild(shaderCheck);
+  shaderSelector.appendChild(shaderLabel);
+  gridSelectors.appendChild(shaderSelector);
 
-  gridSelectors.appendChild(multicolorCheck);
-  gridSelectors.appendChild(multicolorLabel);
+  multicolorSelector.appendChild(multicolorCheck);
+  multicolorSelector.appendChild(multicolorLabel);
+  gridSelectors.appendChild(multicolorSelector);
 
+  colorSelector.appendChild(colorInput);
+  colorSelector.appendChild(colorInputLabel);
   gridSelectors.appendChild(colorSelector);
-  gridSelectors.appendChild(colorSelectorLabel);
 
-  gridSelectors.appendChild(showGridLine);
-  gridSelectors.appendChild(showGridLineLabel);
+  gridLineSelector.appendChild(toggleGridLines);
+  gridLineSelector.appendChild(toggleGridLinesLabel);
+  gridSelectors.appendChild(gridLineSelector);
 
-  gridSelectors.appendChild(resizeInputLabel);
-  gridSelectors.appendChild(resizeInput);
+  resizeSelector.appendChild(resizeInputLabel);
+  resizeSelector.appendChild(resizeInput);
+  gridSelectors.appendChild(resizeSelector);
 
   gridSelectors.appendChild(clearGridButton);
 
@@ -134,11 +152,16 @@ function blockInvalidInput(e) {
   createGrid(resizeValue);
 }
 
-function toggleGridLines(e) {
+function toggleGridLine(e) {
   const gridItems = document.querySelectorAll(".gridItems");
   if (e.target.checked) {
     gridItems.forEach((item) => {
       item.style.border = "none";
+    });
+  }
+  else {
+    gridItems.forEach((item) => {
+      item.style.border = "1px solid black";
     });
   }
 }
@@ -150,7 +173,7 @@ function clearGrid() {
 
 function selectGridFill(e) {
   const shaderCheck = document.querySelector("#shaderCheck");
-  const colorSelected = document.querySelector("#colorSelector");
+  const colorSelected = document.querySelector("#colorInput");
   let shadeDegree = +(e.target.style.backgroundColor.slice(-4, -1)) + 0.1;
 
   if (shaderCheck.checked && multicolorCheck.checked) {
